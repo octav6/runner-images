@@ -74,8 +74,6 @@ jobs:
       targetType: filePath
       filePath: ./images.CI/linux-and-win/build-image.ps1
       arguments: -ResourcesNamePrefix "$(Build.BuildId)" `
-                        -ClientId "${{ variables['CLIENT_ID'] }}" `
-                        -ClientSecret "${{ variables['CLIENT_SECRET'] }}" `
                         -TemplatePath "$(TemplatePath)" `
                         -ResourceGroup "${{ variables['AZURE_RESOURCE_GROUP'] }}" `
                         -StorageAccount "${{ variables['AZURE_STORAGE_ACCOUNT'] }}" `
@@ -86,6 +84,8 @@ jobs:
                         -VirtualNetworkRG "${{ variables['BUILD_AGENT_VNET_RESOURCE_GROUP'] }}" `
                         -VirtualNetworkSubnet "${{ variables['BUILD_AGENT_SUBNET_NAME'] }}" `
                         -BuildResourceGroupName "${{ variables['BUILD_RESOURCE_GROUP_NAME'] }}"
+                        -ClientId "${{ variables['CLIENT_ID'] }}" `
+                        -ClientSecret "${{ variables['CLIENT_SECRET'] }}" `
     env:
       PACKER_LOG: 1
       PACKER_LOG_PATH: $(Build.ArtifactStagingDirectory)/packer-log.txt
