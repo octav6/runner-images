@@ -74,7 +74,7 @@ jobs:
       targetType: filePath
       filePath: ./images.CI/linux-and-win/build-image.ps1
       arguments: -ResourcesNamePrefix "$(Build.BuildId)" `
-                        -ClientId "${{ variables['CLIENT_ID'] }}" `
+                        -ClientId "${{ variables.CLIENT_ID }}" `
                         -ClientSecret "${{ variables['CLIENT_SECRET'] }}" `
                         -TemplatePath "$(TemplatePath)" `
                         -ResourceGroup "${{ variables['AZURE_RESOURCE_GROUP'] }}" `
