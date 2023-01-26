@@ -30,7 +30,7 @@ if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
 }
 else
 {
-    $BuildResourceGroupName = [string]::Empty
+    $BuildResourceGroupName = $null
 }
 
 $InstallPassword = [System.GUID]::NewGuid().ToString().ToUpper()
