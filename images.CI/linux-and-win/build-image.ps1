@@ -28,6 +28,10 @@ if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
     $TempResourceGroupName = [string]::Empty
     $Location = [string]::Empty
 }
+else 
+{
+    $TempResourceGroupName = "${ResourcesNamePrefix}_${Image}"
+}
 
 $InstallPassword = [System.GUID]::NewGuid().ToString().ToUpper()
 
