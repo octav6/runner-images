@@ -77,15 +77,15 @@ jobs:
                         -ClientId $[variables.CLIENT_ID] `
                         -ClientSecret "$[variables.CLIENT_SECRET]" `
                         -TemplatePath "$(TemplatePath)" `
-                        -ResourceGroup "${{ variables['AZURE_RESOURCE_GROUP'] }}" `
-                        -StorageAccount "${{ variables['AZURE_STORAGE_ACCOUNT'] }}" `
-                        -SubscriptionId "${{ variables['AZURE_SUBSCRIPTION'] }}" `
-                        -TenantId "${{ variables['AZURE_TENANT'] }}" `
+                        -ResourceGroup "$[variables.AZURE_RESOURCE_GROUP]" `
+                        -StorageAccount "$[variables.AZURE_STORAGE_ACCOUNT]" `
+                        -SubscriptionId "$[variables.AZURE_SUBSCRIPTION]" `
+                        -TenantId "$[variables.AZURE_TENANT]" `
                         -Location $[variables.AZURE_LOCATION] `
-                        -VirtualNetworkName "${{ variables['BUILD_AGENT_VNET_NAME'] }}" `
-                        -VirtualNetworkRG "${{ variables['BUILD_AGENT_VNET_RESOURCE_GROUP'] }}" `
-                        -VirtualNetworkSubnet "${{ variables['BUILD_AGENT_SUBNET_NAME'] }}" `
-                        -BuildResourceGroupName "${{ variables['BUILD_RESOURCE_GROUP_NAME'] }}"
+                        -VirtualNetworkName "$[variables.BUILD_AGENT_VNET_NAME]" `
+                        -VirtualNetworkRG "$[variables.BUILD_AGENT_VNET_RESOURCE_GROUP]" `
+                        -VirtualNetworkSubnet "$[variables.BUILD_AGENT_SUBNET_NAME]" `
+                        -BuildResourceGroupName "$[variables.BUILD_RESOURCE_GROUP_NAME]"
 
     env:
       PACKER_LOG: 1
