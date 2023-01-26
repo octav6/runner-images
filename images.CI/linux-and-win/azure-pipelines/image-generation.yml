@@ -76,7 +76,6 @@ jobs:
       arguments: -ResourcesNamePrefix "$(Build.BuildId)" `
                         -ClientId $[variables.CLIENT_ID] `
                         -ClientSecret "$[variables.CLIENT_SECRET]" `
-                        -ResourcesNamePrefix "$(Build.BuildId)" `
                         -TemplatePath "$(TemplatePath)" `
                         -ResourceGroup "${{ variables['AZURE_RESOURCE_GROUP'] }}" `
                         -StorageAccount "${{ variables['AZURE_STORAGE_ACCOUNT'] }}" `
