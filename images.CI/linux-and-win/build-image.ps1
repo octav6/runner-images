@@ -21,7 +21,7 @@ if (-not (Test-Path $TemplatePath))
 }
 
 $Image = [io.path]::GetFileName($TemplatePath).Split(".")[0]
-$TempResourceGroupName = "${ResourcesNamePrefix}_${Image}"
+#$TempResourceGroupName = "${ResourcesNamePrefix}_${Image}"
 
 if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
 {
@@ -30,7 +30,8 @@ if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
 }
 else
 {
-    $BuildResourceGroupName = $null
+    $TempResourceGroupName = "${ResourcesNamePrefix}_${Image}"
+    
 }
 
 $InstallPassword = [System.GUID]::NewGuid().ToString().ToUpper()
