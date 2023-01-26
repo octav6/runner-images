@@ -82,7 +82,7 @@ jobs:
                         -StorageAccount "${{ variables['AZURE_STORAGE_ACCOUNT'] }}" `
                         -SubscriptionId "${{ variables['AZURE_SUBSCRIPTION'] }}" `
                         -TenantId "${{ variables['AZURE_TENANT'] }}" `
-                        -Location ${{ variables.AZURE_LOCATION }} `
+                        -Location $[variables.AZURE_LOCATION] `
                         -VirtualNetworkName "${{ variables['BUILD_AGENT_VNET_NAME'] }}" `
                         -VirtualNetworkRG "${{ variables['BUILD_AGENT_VNET_RESOURCE_GROUP'] }}" `
                         -VirtualNetworkSubnet "${{ variables['BUILD_AGENT_SUBNET_NAME'] }}" `
