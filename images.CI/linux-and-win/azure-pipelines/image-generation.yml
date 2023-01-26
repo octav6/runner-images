@@ -74,7 +74,7 @@ jobs:
       targetType: filePath
       filePath: ./images.CI/linux-and-win/build-image.ps1
       arguments: -ResourcesNamePrefix "$(Build.BuildId)" `
-                        -ClientId "${{ variables['CLIENT_ID'] }}" `
+                        -ClientId $[variables.CLIENT_ID] `
                         -ClientSecret "${{ variables['CLIENT_SECRET'] }}" `
                         -ResourcesNamePrefix "$(Build.BuildId)" `
                         -TemplatePath "$(TemplatePath)" `
@@ -82,7 +82,7 @@ jobs:
                         -StorageAccount "${{ variables['AZURE_STORAGE_ACCOUNT'] }}" `
                         -SubscriptionId "${{ variables['AZURE_SUBSCRIPTION'] }}" `
                         -TenantId "${{ variables['AZURE_TENANT'] }}" `
-                        -Location "${{ variables['AZURE_LOCATION'] }}" `
+                        -Location ${{ variables.AZURE_LOCATION }} `
                         -VirtualNetworkName "${{ variables['BUILD_AGENT_VNET_NAME'] }}" `
                         -VirtualNetworkRG "${{ variables['BUILD_AGENT_VNET_RESOURCE_GROUP'] }}" `
                         -VirtualNetworkSubnet "${{ variables['BUILD_AGENT_SUBNET_NAME'] }}" `
