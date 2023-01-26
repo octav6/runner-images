@@ -28,7 +28,7 @@ if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
     $TempResourceGroupName = [string]::Empty
     $Location = [string]::Empty
 }
-elseif(!($BuildResourceGroupName))
+elseif($BuildResourceGroupName -eq $null)
 {
     $TempResourceGroupName = "${ResourcesNamePrefix}_${Image}"
 
