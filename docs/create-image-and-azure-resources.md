@@ -1,13 +1,16 @@
 # GitHub Actions Runner Images
-The runner-images project uses [Packer](https://www.packer.io/) to generate disk images for the following platforms: Windows 2019/2022, Ubuntu 18.04/20.04/22.04. 
+
+The runner-images project uses [Packer](https://www.packer.io/) to generate disk images for the following platforms: Windows 2019/2022, Ubuntu 18.04/20.04/22.04.
 Each image is configured through a JSON template that Packer understands and which specifies where to build the image (Azure in this case), and what scripts to run to install software and prepare the disk.
-The Packer process initializes a connection to Azure subscription via Azure CLI, and automatically creates the temporary Azure resources required to build the source VM(temporary resource group, network interfaces, and VM from the "clean" image specified in the template). 
+The Packer process initializes a connection to Azure subscription via Azure CLI, and automatically creates the temporary Azure resources required to build the source VM(temporary resource group, network interfaces, and VM from the "clean" image specified in the template).
 If the VM deployment succeeds, the build agent connects to the VM and starts to execute installation steps from the JSON template.
 If any step in the JSON template fails, image generation will be aborted and the temporary VM will be terminated. Packer will also attempt to cleanup all the temporary resources it created (unless otherwise told).
 After successful image generation, a snapshot of the temporary VM will be converted to VHD image and then uploaded to the specified Azure Storage Account.
 
 ## Prerequisites and Image-generation
+
 ### Build Agent requirements
+
 - `OS` - Windows/Linux
 - `packer 1.8.2 or higher` - Can be downloaded from https://www.packer.io/downloads
 - `PowerShell 5.0 or higher` or `PSCore` for linux distributes.
@@ -16,38 +19,46 @@ After successful image generation, a snapshot of the temporary VM will be conver
 - `Git for Windows` - https://gitforwindows.org/
 
 > To connect to a temporary VM packer uses WinRM or SSH connections on public IP interfaces.
-If you use a build agent located in an Azure subscription, please make sure that HTTPS/SSH ports are allowed for incoming/outgoing connections.
-In case of firewall restrictions, prohibiting connections from public addresses, private virtual network resources can be deployed and passed as arguments to the packer. This approach allows virtual machines to use private connections inside VLAN.
+> If you use a build agent located in an Azure subscription, please make sure that HTTPS/SSH ports are allowed for incoming/outgoing connections.
+> In case of firewall restrictions, prohibiting connections from public addresses, private virtual network resources can be deployed and passed as arguments to the packer. This approach allows virtual machines to use private connections inside VLAN.
 
 ### Service principal
+
 Packer uses Service Principal to authorize in Azure infrastructure. To setup image-generation CI or use packer manually — SP with full read-write permissions for selected Azure subscription needed.
 Detailed instruction can be found in [Azure documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal)
 
 ### Prepare environment and image deployment
+
 #### How to prepare Windows build agent
+
 Local machine or [Azure VM](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/quick-create-cli) can be used as a build agent.
 
 Download & install `packer` from https://www.packer.io/downloads, or install it via [Chocolatey](https://chocolatey.org/):
+
 ```
 choco install packer
 ```
 
 Download & install `git` from https://github.com/git-for-windows/git/releases, or install it via [Chocolatey](https://chocolatey.org/):
+
 ```
 choco install git -params '"/GitAndUnixToolsOnPath"'
 ```
 
 Install the Azure Az PowerShell module - https://docs.microsoft.com/en-us/powershell/azure/install-az-ps.
+
 ```
 Install-Module -Name Az -Repository PSGallery -Force
 ```
 
 Install Azure CLI - https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?view=azure-cli-latest&tabs=azure-cli.
+
 ```
 Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
 ```
 
 Download Runner Images repository.
+
 ```
 Set-Location c:\
 git clone https://github.com/actions/runner-images.git
@@ -62,7 +73,9 @@ Import-Module .\helpers\GenerateResourcesAndImage.ps1
 
 GenerateResourcesAndImage -SubscriptionId {YourSubscriptionId} -ResourceGroupName "myTestResourceGroup" -ImageGenerationRepositoryRoot "$pwd" -ImageType Ubuntu1804 -AzureLocation "East US"
 ```
+
 Where:
+
 - `SubscriptionId` - The Azure subscription Id where resources will be created.
 - `ResourceGroupName` - The Azure resource group name where the Azure resources will be created.
 - `ImageGenerationRepositoryRoot` - The root path of the image generation repository source.
@@ -86,6 +99,7 @@ GenerateResourcesAndImage -SubscriptionId {YourSubscriptionId} -ResourceGroupNam
 *Please, check synopsis of `GenerateResourcesAndImage` for details about non-mandatory parameters.*
 
 #### Generated VM Deployment
+
 After the successful image generation, Virtual Machine can be created from the generated VHD using [CreateAzureVMFromPackerTemplate](../helpers/CreateAzureVMFromPackerTemplate.ps1) script.
 
 ```
@@ -95,10 +109,12 @@ Import-Module .\helpers\CreateAzureVMFromPackerTemplate.ps1
 
 CreateAzureVMFromPackerTemplate -SubscriptionId {YourSubscriptionId}  -ResourceGroupName {ResourceGroupName} -TemplateFile "C:\BuildVmImages\temporaryTemplate.json" -VirtualMachineName "testvm1" -AdminUsername "shady1" -AdminPassword "SomeSecurePassword1" -AzureLocation "eastus"
 ```
+
 Where:
+
 - `SubscriptionId` - The Azure subscription Id where resources will be created.
 - `ResourceGroupName` - The Azure resource group name where the Azure virtual machine will be created.
-- `TemplateFilePath` - The path to the json ARM-template generated by packer during image generation locally.* 
+- `TemplateFilePath` - The path to the json ARM-template generated by packer during image generation locally.*
 - `VirtualMachineName` - The name of the virtual machine to be generated.
 - `AdminUserName` - The administrator username for the virtual machine to be created.
 - `AdminPassword` - The administrator password for the virtual machine to be created.
@@ -109,10 +125,12 @@ Where:
 The function creates an Azure VM from a template and generates network resources in Azure to make the VM accessible.
 
 ## Additional
+
 ### User variables
+
 The Packer template includes `variables` section containing user variables used in image generation. Each variable is defined as a key/value strings. User variables can be passed to packer via predefined environment variables, or as direct arguments, in case if packer started manually.
 
-- `build_resource_group_name` - Specify an existing resource group to run the build in it. By default, a temporary resource group will be created and destroyed as part of the build. If you do not have permission to do so, use build_resource_group_name to specify an existing resource group to run the build in it.
+- `build_resource_group_name` - Specify an existing resource group to run the build in it. By default, a temporary resource group will be created and destroyed as part of the build. If you do not have permission to do so, use build_resource_group_name to specify an existing resource group to run the build in it.  Also, the pipeline now  provides the option to use a static resource group by accepting a BUILD_RESOURCE_GROUP_NAME variable.
 - `client_id` - The application ID of the AAD Service Principal. Requires `client_secret`.
 - `object_id` - The object ID for the AAD SP. Will be derived from the oAuth token if empty.
 - `client_secret` - The password or secret for your service principal.
@@ -130,6 +148,7 @@ The Packer template includes `variables` section containing user variables used 
 - `capture_name_prefix` - VHD prefix. The final artifacts will be named PREFIX-osDisk.UUID and PREFIX-vmTemplate.UUID.
 
 ### Builder variables
+
 The `builders` section contains variables for the `azure-arm` builder used in the project. Most of the builder variables are inherited from the `user variables` section, however, the variables can be overwritten to adjust image-generation performance.
 
 - `vm_size` - Size of the VM used for building. This can be changed when you deploy a VM from your VHD.
@@ -139,9 +158,11 @@ The `builders` section contains variables for the `azure-arm` builder used in th
 **Detailed Azure builders documentation can be found in [packer documentation](https://www.packer.io/docs/builders/azure).**
 
 ### Toolset
+
 Configuration for some installed software is located in `toolset.json` files. These files define the list of Ruby, Python, Go versions, the list of PowerShell modules and VS components that will be installed to image. They can be changed if these tools are not required to reduce image generation time or image size.
 
 Generated tool versions and details can be found in related projects:
+
 - [Python](https://github.com/actions/python-versions/)
 - [Go](https://github.com/actions/go-versions)
 - [Node](https://github.com/actions/node-versions)
@@ -151,25 +172,25 @@ Generated tool versions and details can be found in related projects:
 > :warning: These scripts are intended to run on a VM deployed in Azure
 
 The user, created during the image generation, does not exist in the result VHD hence some configuration files related to the user's home directory need to be changed as well as the file permissions for some directories. Scripts for that are located in the `post-generation` folder in the repository:
+
 - Windows: https://github.com/actions/runner-images/tree/main/images/win/post-generation
 - Linux: https://github.com/actions/runner-images/tree/main/images/linux/post-generation
 
 **Note:** The default user for Linux should have `sudo privileges`.
 
 The scripts are copied to the VHD during the image generation process to the following paths:
+
 - Windows: `C:\post-generation`
-- Linux:  `/opt/post-generation` 
+- Linux:  `/opt/post-generation`
 
 #### Running scripts
 
 ##### Ubuntu
 
-        sudo su -c "find /opt/post-generation -mindepth 1 -maxdepth 1 -type f -name '*.sh' -exec bash {} \;"
-
+    sudo su -c "find /opt/post-generation -mindepth 1 -maxdepth 1 -type f -name '*.sh' -exec bash {} \;"
 ##### Windows
 
-        Get-ChildItem C:\post-generation -Filter *.ps1 | ForEach-Object { & $_.FullName }
-
+    Get-ChildItem C:\post-generation -Filter *.ps1 | ForEach-Object { & $_.FullName }
 #### Script details
 
 ##### Ubuntu

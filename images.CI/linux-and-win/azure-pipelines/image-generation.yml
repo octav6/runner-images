@@ -88,6 +88,7 @@ jobs:
                         -VirtualNetworkRG $(BUILD_AGENT_VNET_RESOURCE_GROUP) `
                         -VirtualNetworkSubnet $(BUILD_AGENT_SUBNET_NAME) `
                         -BuildResourceGroupName "$(BUILD_RESOURCE_GROUP_NAME_RUNTIME)"
+                        
     env:
       PACKER_LOG: 1
       PACKER_LOG_PATH: $(Build.ArtifactStagingDirectory)/packer-log.txt
