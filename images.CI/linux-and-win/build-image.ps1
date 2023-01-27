@@ -22,7 +22,7 @@ if (-not (Test-Path $TemplatePath))
 
 $Image = [io.path]::GetFileName($TemplatePath).Split(".")[0]
 $TempResourceGroupName = "${ResourcesNamePrefix}_${Image}"
-$BuildResourceGroupName = = [string]::Empty
+$BuildResourceGroupName = [string]::Empty
 
 if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
 {
