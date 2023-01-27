@@ -28,10 +28,7 @@ if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
     $TempResourceGroupName = [string]::Empty
     $Location = [string]::Empty
 }
-elseif ($BuildResourceGroupName -eq "")
-{
-    [string]::IsNullOrEmpty($BuildResourceGroupName)
-}
+
 $InstallPassword = [System.GUID]::NewGuid().ToString().ToUpper()
 
 packer validate -syntax-only $TemplatePath
