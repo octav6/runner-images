@@ -28,7 +28,7 @@ if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
     $TempResourceGroupName = [string]::Empty
     $Location = [string]::Empty
 }
-elseif ($BuildResourceGroupName -eq "false")
+elseif ($BuildResourceGroupName -eq "")
 {
     [string]::IsNullOrEmpty($BuildResourceGroupName)
 }
