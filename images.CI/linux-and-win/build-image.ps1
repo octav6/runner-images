@@ -28,10 +28,6 @@ if (-not [string]::IsNullOrEmpty($BuildResourceGroupName))
     $TempResourceGroupName = [string]::Empty
     $Location = [string]::Empty
 }
-elseif (-not $BuildResourceGroupName)
-{
-    $BuildResourceGroupName = [string]::Empty
-}
 
 $InstallPassword = [System.GUID]::NewGuid().ToString().ToUpper()
 
