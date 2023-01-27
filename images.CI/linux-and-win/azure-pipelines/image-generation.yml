@@ -29,7 +29,7 @@ parameters:
     default: true
 
   - name: build_resource_group_name
-    type: boolean
+    type: string
     default: false
 
   - name: repository_ref
