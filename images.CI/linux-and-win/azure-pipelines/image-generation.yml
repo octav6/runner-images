@@ -40,6 +40,8 @@ jobs:
   pool: ${{ parameters.agent_pool }}
   variables:
     - group: ${{ parameters.variable_group_name }}
+    - name: 'BUILD_RESOURCE_GROUP_NAME_RUNTIME'
+      value: $[variables.BUILD_RESOURCE_GROUP_NAME]
 
   steps:
   - checkout: ${{ parameters.repository_ref }}
@@ -85,7 +87,7 @@ jobs:
                         -VirtualNetworkName $(BUILD_AGENT_VNET_NAME) `
                         -VirtualNetworkRG $(BUILD_AGENT_VNET_RESOURCE_GROUP) `
                         -VirtualNetworkSubnet $(BUILD_AGENT_SUBNET_NAME) `
-                        -BuildResourceGroupName "${{ variables.BUILD_RESOURCE_GROUP_NAME }}"
+                        -BuildResourceGroupName $(BUILD_RESOURCE_GROUP_NAME_RUNTIME)
     env:
       PACKER_LOG: 1
       PACKER_LOG_PATH: $(Build.ArtifactStagingDirectory)/packer-log.txt
