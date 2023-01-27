@@ -30,7 +30,7 @@ parameters:
 
   - name: build_resource_group_name
     type: boolean
-    default: true
+    default: false
 
   - name: repository_ref
     type: string
@@ -89,7 +89,7 @@ jobs:
                         -VirtualNetworkName $(BUILD_AGENT_VNET_NAME) `
                         -VirtualNetworkRG $(BUILD_AGENT_VNET_RESOURCE_GROUP) `
                         -VirtualNetworkSubnet $(BUILD_AGENT_SUBNET_NAME) `
-                        
+
     env:
       PACKER_LOG: 1
       PACKER_LOG_PATH: $(Build.ArtifactStagingDirectory)/packer-log.txt
